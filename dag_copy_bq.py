@@ -151,16 +151,16 @@ with models.DAG('bq_copy_us_to_eu_01',
             # Replace ":" with valid character for Airflow task
             task_id='{}_BQ_to_GCS'.format(table_source.replace(":", "_")),
             source_project_dataset_table=table_source,
-            destination_cloud_storage_uris=['{}-*.avro'.format(
+            destination_cloud_storage_uris=['{}-*.csv'.format(
                 'gs://' + source_bucket + '/' + table_source)],
-            export_format='AVRO'
+            export_format='CSV'
         )
 
         GCS_to_GCS = gcs_to_gcs.GoogleCloudStorageToGoogleCloudStorageOperator(
             # Replace ":" with valid character for Airflow task
             task_id='{}_GCS_to_GCS'.format(table_source.replace(":", "_")),
             source_bucket=source_bucket,
-            source_object='{}-*.avro'.format(table_source),
+            source_object='{}-*.csv'.format(table_source),
             destination_bucket=dest_bucket,
             # destination_object='{}-*.avro'.format(table_dest)
         )
@@ -169,9 +169,9 @@ with models.DAG('bq_copy_us_to_eu_01',
             # Replace ":" with valid character for Airflow task
             task_id='{}_GCS_to_BQ'.format(table_dest.replace(":", "_")),
             bucket=dest_bucket,
-            source_objects=['{}-*.avro'.format(table_source)],
+            source_objects=['{}-*.csv'.format(table_source)],
             destination_project_dataset_table=table_dest,
-            source_format='AVRO',
+            source_format='csv',
             write_disposition='WRITE_TRUNCATE'
         )
 
