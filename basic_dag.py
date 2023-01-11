@@ -12,4 +12,17 @@ default_dag_args = {
 with models.DAG(
     'ivan_simple_greeting',
     schedule_interval=datetime.timedelta(days=1),
-    default_dag_args = default_dag_args) as dag;
+    default_args = default_dag_args
+) as dag:
+
+    start = dummy_operator.DummyOperator(
+        task_id = 'start',
+        trigger_rule = 'all_success'
+    )
+
+    end = dummy_operator.DummyOperator(
+        task_id = 'end',
+        trigger_rule = 'all_success'        
+    )
+
+    start >> end
