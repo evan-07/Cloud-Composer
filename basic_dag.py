@@ -35,7 +35,7 @@ with models.DAG(
 
     goodbye_bash = bash_operator.BashOperator(
         task_id = 'goodbye',
-        bash_callable = 'echo goodbye'
+        bash_command = 'echo goodbye'
     )
 
     end = dummy_operator.DummyOperator(
