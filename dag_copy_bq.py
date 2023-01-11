@@ -122,10 +122,9 @@ def read_table_list(table_list_file):
 # Define a DAG (directed acyclic graph) of tasks.
 # Any task you create within the context manager is automatically added to the
 # DAG object.
-with models.DAG('bq_copy_us_to_eu_01', 
-                default_args=default_args, 
+with models.DAG('bq_copy_us_to_eu_01',
+                default_args=default_args,
                 schedule_interval=None) as dag:
-
     start = dummy_operator.DummyOperator(
         task_id='start',
         trigger_rule='all_success'
@@ -133,6 +132,7 @@ with models.DAG('bq_copy_us_to_eu_01',
 
     end = dummy_operator.DummyOperator(
         task_id='end',
+
         trigger_rule='all_success'
     )
 
@@ -175,5 +175,4 @@ with models.DAG('bq_copy_us_to_eu_01',
             write_disposition='WRITE_TRUNCATE'
         )
 
-#       start >> 'what should be the sequence of steps?' >> end
         start >> BQ_to_GCS >> GCS_to_GCS >> GCS_to_BQ >> end
