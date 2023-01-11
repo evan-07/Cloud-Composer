@@ -169,9 +169,10 @@ with models.DAG('bq_copy_us_to_eu_01',
             # Replace ":" with valid character for Airflow task
             task_id='{}_GCS_to_BQ'.format(table_dest.replace(":", "_")),
             bucket=dest_bucket,
-            source_objects=['{}-*.csv'.format(table_source)],
+#            source_objects=['{}-*.csv'.format(table_source)],
+            source_objects=['nyc-tlc:green.trips_2015-000000000000.csv','nyc-tlc:green.trips_2015-000000000001.csv'],
             destination_project_dataset_table=table_dest,
-            source_format='csv',
+            source_format='CSV',
             write_disposition='WRITE_TRUNCATE'
         )
 
