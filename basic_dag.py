@@ -1,4 +1,5 @@
 from __future__ import print_function
+
 import datetime
 import logging
 
@@ -19,15 +20,27 @@ with models.DAG(
     default_args = default_dag_args
 ) as dag:
 
+    def greeting():
+        logging.info('hello world')
+
     start = dummy_operator.DummyOperator(
         task_id = 'start',
         trigger_rule = 'all_success'
     )
 
+    hello_python = python_operator.PythonOperator(
+        task_id = 'hello',
+        python_callable = greeting
+    )
+
+    goodbye_bash = bash_operator.BashOperator(
+        task_id = 'goodbye',
+        bash_callable = 'echo goodbye'
+    )
 
     end = dummy_operator.DummyOperator(
         task_id = 'end',
         trigger_rule = 'all_success'        
     )
 
-    start >> end
+    start >> hello_python >> goodbye_bash >> end
