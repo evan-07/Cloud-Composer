@@ -1,12 +1,16 @@
 from __future__ import print_function
 import datetime
+import logging
+
 from airflow import models
 from airflow.operators import bash_operator
 from airflow.operators import python_operator
 from airflow.operators import dummy_operator
 
 default_dag_args = {
-    'start_date': datetime.datetime(2018,1,1)
+    'start_date': datetime.datetime(2018,1,1),
+    'owner': 'airflow',
+    'depends_on_past': False
 }
 
 with models.DAG(
@@ -19,6 +23,7 @@ with models.DAG(
         task_id = 'start',
         trigger_rule = 'all_success'
     )
+
 
     end = dummy_operator.DummyOperator(
         task_id = 'end',
